@@ -1,0 +1,34 @@
+{
+  "name": "bjorling-nedb-storage",
+  "author": "Brian Mavity <brian@brianmavity.com> (http://www.brianmavity.com)",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/bmavity/bjorling-nedb-storage.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bmavity/bjorling-nedb-storage/issues"
+  },
+  "contributors": [
+    "Brian Mavity <brian@brianmavity.com> (http://www.brianmavity.com)"
+  ],
+  "description": "nedb storage for Bjorling",
+  "dependencies": {
+  },
+  "devDependencies": {
+  	"bjorling": "0.x.x"
+  , "mocha": "1.x.x"
+ 	, "levelweb": "0.x.x"
+  , "should": "1.x.x"
+  },
+  "engines": {
+    "node": "0.10.x"
+  },
+  "scripts": {
+    "test": "mocha -r should -R tap test/**/*.js",
+    "watch": "mocha -w -r should -R spec test/**/*.js"
+  },
+  "keywords": [],
+  "license": "mit +no-false-attribs, +no-advertising license",
+  "main": "./bjorling-nedb-storage.js",
+  "version": "0.6.0"
+}
