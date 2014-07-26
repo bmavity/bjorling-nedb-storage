@@ -3,7 +3,7 @@ var storage = require('../')
 	, eb = require('./eb')
 	, fs = require('fs')
 
-describe('bjorling level projection storage, when reset', function() {
+describe('bjorling nedb projection storage, when reset', function() {
 	var db
 		, originalValue = {
 				theKey: '552230234'
