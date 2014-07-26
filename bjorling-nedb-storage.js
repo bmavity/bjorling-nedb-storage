@@ -100,9 +100,12 @@ function isUndefined(val) {
 	return typeof(val) === 'undefined'
 }
 
+NeDbProjection.prototype.reset = function(cb) {
+	this._db.remove({}, cb)
+}
+
 NeDbProjection.prototype.save = function(val, cb) {
 	var keyVal = this.getKeyValue(val)
-	console.log(keyVal)
 	//console.log('saving', this._projectionName, this._key, keyVal)
 	this._db.update(keyVal, val, { upsert: true }, cb)
 }

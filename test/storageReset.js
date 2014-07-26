@@ -1,9 +1,6 @@
-return
-
 var storage = require('../')
-	, dbPath = './testdb/reset'
+	, dbPath = './testdb/reset.db'
 	, eb = require('./eb')
-	, counter = require('./keyCounter')
 	, fs = require('fs')
 
 describe('bjorling level projection storage, when reset', function() {
@@ -22,7 +19,7 @@ describe('bjorling level projection storage, when reset', function() {
 		}
 
 		function getKeyCount() {
-			counter(projectionStorage._db, eb(done, completeCount))
+			projectionStorage._db.count({}, eb(done, completeCount))
 		}
 
 		function resetStorage() {
@@ -36,15 +33,11 @@ describe('bjorling level projection storage, when reset', function() {
 		
 		var s = storage(dbPath)
 		db = s._db
-		s('spec 1', 'theKey', eb(done, performSave))
+		performSave(s('spec 1', 'theKey'))
 	})
 
 	after(function(done) {
-		return done()
-		db.close(function(err) {
-			if(err) done()
-			leveldown.destroy(dbPath, done)
-		})
+		fs.unlink(dbPath, done)
 	})
 
   it('should remove all keys for projection, but not bjorling entry', function() {
