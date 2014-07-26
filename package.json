@@ -13,12 +13,12 @@
   ],
   "description": "nedb storage for Bjorling",
   "dependencies": {
+    "nedb": "^0.10.6"
   },
   "devDependencies": {
-  	"bjorling": "0.x.x"
-  , "mocha": "1.x.x"
- 	, "levelweb": "0.x.x"
-  , "should": "1.x.x"
+    "bjorling": "0.x.x",
+    "mocha": "1.x.x",
+    "should": "1.x.x"
   },
   "engines": {
     "node": "0.10.x"
