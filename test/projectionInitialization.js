@@ -1,27 +1,21 @@
-return
 var storage = require('../')
+	, fs = require('fs')
 	, errors = require('../errors')
-	, dbPath = './testdb/projectionInitialization'
 	, eb = require('./eb')
-	, level = require('levelup')
-	, sub = require('level-sublevel')
 
-describe('bjorling level projection storage, when properly initialized', function() {
-	var db
+describe('bjorling nedb projection storage, when properly initialized', function() {
+	var dbPath = './testdb/projectionInitialization1.db'
 		, projectionStorage = null
 
 	before(function(done) {
-		var s = storage(dbPath)
-		db = s._db
-		s('aProjection', 'aKey', eb(done, function(p) {
-			projectionStorage = p
-			done()
-		}))
+		projectionStorage = storage(dbPath)('aProjection', 'aKey')
+		setImmediate(done)
 	})
 
 	after(function(done) {
-		db.close(function() {
-			leveldown.destroy(dbPath, done)
+		fs.unlink(dbPath, function(err) {
+			if(err) return done()
+			done()
 		})
 	})
 
@@ -30,58 +24,48 @@ describe('bjorling level projection storage, when properly initialized', functio
 	})
 })
 
-describe('bjorling level projection storage, when properly initialized for the first time', function() {
-	var db
-		, __bjorling
-		, bjorlingEntry = null
-
-	function getBjorling(done) {
-		db = sub(level(dbPath))
-		__bjorling = db.sublevel('__bjorling')
-		__bjorling.get('aProjection', function(err, result) {
-			if(err) return done(err)
-			bjorlingEntry = result
-			done()
-		})
-	}
+describe('bjorling nedb projection storage, when properly initialized for the first time', function() {
+	var dbPath = './testdb/projectionInitialization2.db'
+		, currentStatus
 
 	before(function(done) {
-		var s = storage(dbPath)
-		s('aProjection', 'aKey', function() {
-			s._db.close(function(err) {
-				if(err) return done(err)
-				getBjorling(done)
-			})
+		var projection = storage(dbPath)('aProjection', 'aKey')
+		projection.getStatus(function(err, status) {
+			if(err) return done(err)
+
+			currentStatus = status
+			done(null)
 		})
 	})
 
 	after(function(done) {
-		db.close(function() {
-			leveldown.destroy(dbPath, done)
+		fs.unlink(dbPath, function(err) {
+			done()
 		})
 	})
 
-	it('should create an entry in __bjorling', function() {
-		bjorlingEntry.should.not.be.null
+	it('should have last processed event of 0', function() {
+		currentStatus.lastProcessedEvent.should.equal(0)
 	})
 })
 
-describe('bjorling level projection storage, when initialized without a projection name', function() {
-	var db
+describe('bjorling nedb projection storage, when initialized without a projection name', function() {
+	var dbPath = './testdb/projectionInitialization3.db'
 		, thrownError
 
 	before(function(done) {
-		s = storage(dbPath)
-		db = s._db
-		s(null, 'key', function(err, p) {
+		try {
+			storage(dbPath)(null, 'key') 
+		}
+		catch (err) {
 			thrownError = err
 			done()
-		})
+		}
 	})
 
 	after(function(done) {
-		db.close(function() {
-			leveldown.destroy(dbPath, done)
+		fs.unlink(dbPath, function(err) {
+			done()
 		})
 	})
 
@@ -94,22 +78,23 @@ describe('bjorling level projection storage, when initialized without a projecti
 	})
 })
 
-describe('bjorling level projection storage, when initialized without a key', function() {
-	var db
+describe('bjorling nedb projection storage, when initialized without a key', function() {
+	var dbPath = './testdb/projectionInitialization4.db'
 		, thrownError
 
 	before(function(done) {
-		s = storage(dbPath)
-		db = s._db
-		s('projection', null, function(err, p) {
+		try {
+			storage(dbPath)('projection', null) 
+		}
+		catch (err) {
 			thrownError = err
-			done()
-		})
+			setTimeout(done, 100)
+		}
 	})
 
 	after(function(done) {
-		db.close(function() {
-			leveldown.destroy(dbPath, done)
+		fs.unlink(dbPath, function(err) {
+			done()
 		})
 	})
 

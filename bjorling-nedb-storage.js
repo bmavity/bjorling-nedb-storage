@@ -19,10 +19,34 @@ function createNeDbStorage(location) {
 }
 
 function NeDbProjection(db, projectionName, key) {
+	if(!projectionName) {
+		throw new errors.ProjectionInitializationError('Bjorling NeDb Projection Storage requires a projection name to be initialized.')
+	}
+	if(!key) {
+		throw new errors.ProjectionInitializationError('Bjorling NeDb Projection Storage requires a key to be initialized.')
+	}
+
 	this._db = db
 	this._projectionName = projectionName
 	this._key = key
 	this._indexes = []
+
+	//this._verifyStatus()
+}
+
+NeDbProjection.prototype._verifyStatus = function() {
+	var projectionName = this._projectionName
+		, db = this._db
+	this._db.findOne({ __bjorling: projectionName }, function(err, status) {
+		if(err) throw err
+		if(!status) {
+			status = {
+				__bjorling: projectionName
+			, status: { lastProcessedEvent: 0 }
+			}
+			db.insert(status)
+		}
+	})
 }
 
 NeDbProjection.prototype.addIndex = function(index, cb) {
@@ -95,6 +119,15 @@ NeDbProjection.prototype.getKeyValue = function(obj) {
 	return Object.keys(keyObj).length ? keyObj : null
 }
 
+NeDbProjection.prototype.getStatus = function(cb) {
+	this._db.findOne({ __bjorling: this._projectionName }, function(err, result) {
+		if(err) return cb(err)
+		if(!result) return cb(new Error('Projection does not have __bjorling status'))
+
+		cb(null, result.status)
+	})
+}
+
 function isUndefined(val) {
 	return typeof(val) === 'undefined'
 }
@@ -110,7 +143,7 @@ NeDbProjection.prototype.save = function(val, cb) {
 }
 
 /*
-BjorlingLevelProjectionStorage.prototype.get = function(queryObj, cb) {
+BjorlingNeDbProjectionStorage.prototype.get = function(queryObj, cb) {
 	var db = this._db
 		, keyVal = this.getKeyValue(queryObj)
 		, isRawQuery = !!queryObj.$and
@@ -197,18 +230,18 @@ function getArgs(arrayLike) {
 }
 
 module.exports = function(location, key) {
-	var s = new LevelStorage(location, key)
+	var s = new NeDbStorage(location, key)
 		, __bjorling = s._db.sublevel('__bjorling')
 		, a = function(projectionName, key, cb) {
 				if(!projectionName) {
-					var err = new errors.ProjectionInitializationError('Bjorling Level Projection Storage requires a projection name to be initialized.')
+					var err = new errors.ProjectionInitializationError('Bjorling NeDb Projection Storage requires a projection name to be initialized.')
 					if(cb) {
 						return cb(err)
 					}
 					throw err
 				}
 				if(!key) {
-					var err = new errors.ProjectionInitializationError('Bjorling Level Projection Storage requires a key to be initialized.')
+					var err = new errors.ProjectionInitializationError('Bjorling NeDb Projection Storage requires a key to be initialized.')
 					if(cb) {
 						return cb(err)
 					}
@@ -216,7 +249,7 @@ module.exports = function(location, key) {
 				}
 
 				var db = s._db.sublevel(projectionName)
-					, p = new BjorlingLevelProjectionStorage(db, projectionName, key)
+					, p = new BjorlingNeDbProjectionStorage(db, projectionName, key)
 				__bjorling.put(projectionName, {}, function(err) {
 					if(err &&  cb) return cb(err)
 					cb && cb(null, p)
