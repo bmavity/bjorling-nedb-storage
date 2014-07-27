@@ -4,8 +4,7 @@ var storage = require('../')
 	, fs = require('fs')
 
 describe('bjorling nedb projection storage, when reset', function() {
-	var db
-		, originalValue = {
+	var originalValue = {
 				theKey: '552230234'
 			, aVal: 'hiya'
 			}
@@ -31,9 +30,7 @@ describe('bjorling nedb projection storage, when reset', function() {
 			projectionStorage.save(originalValue, eb(done, resetStorage))
 		}
 		
-		var s = storage(dbPath)
-		db = s._db
-		performSave(s('spec 1', 'theKey'))
+		performSave(storage(dbPath)('spec 1', 'theKey'))
 	})
 
 	after(function(done) {
