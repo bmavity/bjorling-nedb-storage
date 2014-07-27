@@ -1,87 +1,58 @@
-return 
 var storage = require('../')
+	, fs = require('fs')
 	, errors = require('../errors')
-	, dbPath = './testdb/initialization'
 	, eb = require('./eb')
+	, Datastore = require('nedb')
+
 require('./shouldExtensions')
 
-describe('bjorling level storage, when initialized with a valid location, and the location does not contain an existing leveldb instance', function() {
-	var db = null
+describe('bjorling nedb storage, when initialized with a valid location, and the location does not contain an existing nedb instance', function() {
+	var dbPath = './testdb/initialization1.db'
 
 	before(function(done) {
-		var s = storage(dbPath, true)
-
-		function openDb() {
-			level(dbPath, { createIfMissing: false }, function(err, newdb) {
-				if(err) return done(err)
-				db = newdb
-				done()
-			})
-		}
-
-		s._db.on('ready', function() {
-			s._db.close(openDb)
-		})
+		storage(dbPath)
+		setTimeout(done, 250)
 	})
 
 	after(function(done) {
-		db.close(function() {
-			leveldown.destroy(dbPath, done)
-		})
+		fs.unlink(dbPath, done)
 	})
 
-	it('should create a leveldb instance in that location', function() {
-		db.should.not.be.null
+	it('should create a nedb instance in that location', function() {
+		fs.existsSync(dbPath).should.be.true
 	})
 })
 
-describe('bjorling level storage, when initialized with a valid location, and the location contains an existing leveldb instance', function() {
-	var db = null
+describe('bjorling nedb storage, when initialized with a valid location, and the location contains an existing nedb instance', function() {
+	var dbPath = './testdb/initialization2.db'
 		, initialValue = { val: 1 }
 		, getResult
 
 	function putInitialValue(cb) {
-		level(dbPath, { valueEncoding: 'json' }, function(err, initialDb) {
-			if(err) return cb(err)
-			initialDb.put('key1', initialValue)
-			initialDb.close(cb)
-		})
-	}
-
-	function getInitialValue(cb) {
-		level(dbPath, { valueEncoding: 'json' }, function(err, currentDb) {
-			if(err) return cb(err)
-			currentDb.get('key1', function(err, result) {
-				if(err) return cb(err)
-				currentDb.close(function(err) {
-					if(err) return cb(err)
-					cb(null, result)
+		var initialDb = new Datastore({
+					filename: dbPath
+				, autoload: true
 				})
-			})
-		})
+		initialDb.update(initialValue, initialValue, { upsert: true }, cb)
 	}
 
 	before(function(done) {
 		putInitialValue(function(err) {
 			if(err) return done(err)
 
-			var s = storage(dbPath, true)
+			var s = storage(dbPath)('valid', 'val')
+			s.get(initialValue, function(err2, result) {
+				if(err2) return done(err2)
 
-			s._db.on('ready', function() {
-				s._db.close(function(err) {
-					if(err) return done(err)
-					getInitialValue(function(err, result) {
-						if(err) return done(err)
-						getResult = result
-						done()
-					})
-				})
+
+				getResult = result
+				done()
 			})
 		})
 	})
 
 	after(function(done) {
-		leveldown.destroy(dbPath, done)
+		fs.unlink(dbPath, done)
 	})
 
 	it('should use the existing db', function() {
@@ -89,7 +60,7 @@ describe('bjorling level storage, when initialized with a valid location, and th
 	})
 })
 
-describe('bjorling level storage, when initialized without a location', function() {
+describe('bjorling nedb storage, when initialized without a location', function() {
 	var thrownError
 
 	before(function() {
