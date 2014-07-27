@@ -1,11 +1,9 @@
-return
 var storage = require('../')
 	, fs = require('fs')
-	, dbPath = './testdb/singleProjectionAccess.db'
 	, eb = require('./eb')
 
-describe('bjorling level projection storage, when the key is a single value and the get parameter contains a value for the key', function() {
-	var db
+describe('bjorling nedb projection storage, when the key is a single value and the get parameter contains a value for the key', function() {
+	var dbPath = './testdb/singleProjectionAccess1.db'
 		, originalValue = {
 				theKey: '552230234'
 			, aVal: 'hiya'
@@ -31,16 +29,11 @@ describe('bjorling level projection storage, when the key is a single value and 
 			projectionStorage.save(originalValue, eb(done, performGetValue))
 		}
 		
-		var s = storage(dbPath)
-		db = s._db
-		s('spec 1', 'theKey', eb(done, performSave))
+		performSave(storage(dbPath)('spec 1', 'theKey'))
 	})
 
 	after(function(done) {
-		db.close(function(err) {
-			if(err) done()
-			fs.unlink(dbPath)
-		})
+		fs.unlink(dbPath, done)
 	})
 
   it('should retrieve the proper state', function() {
@@ -48,8 +41,8 @@ describe('bjorling level projection storage, when the key is a single value and 
   })
 })
 
-describe('bjorling level projection storage, when the key is an array and the get parameter contains a value for both elements of the key', function() {
-	var db
+describe('bjorling nedb projection storage, when the key is an array and the get parameter contains a value for both elements of the key', function() {
+	var dbPath = './testdb/singleProjectionAccess2.db'
 		, originalValue = {
 	  		keyPart1: '552230234'
 	  	, keyPart2: 'ppuupp'
@@ -77,16 +70,11 @@ describe('bjorling level projection storage, when the key is an array and the ge
 			projectionStorage.save(originalValue, eb(done, performGetValue))
 		}
 		
-		var s = storage(dbPath)
-		db = s._db
-		s('spec 1', ['keyPart1', 'keyPart2'], eb(done, performSave))
+		performSave(storage(dbPath)('spec 1', ['keyPart1', 'keyPart2']))
 	})
 
 	after(function(done) {
-		db.close(function(err) {
-			if(err) done()
-			leveldown.destroy(dbPath, done)
-		})
+		fs.unlink(dbPath, done)
 	})
 
   it('should retrieve the proper state', function() {
@@ -94,8 +82,8 @@ describe('bjorling level projection storage, when the key is an array and the ge
   })
 })
 
-describe('bjorling level projection storage, when the key is not found', function() {
-	var db
+describe('bjorling nedb projection storage, when the key is not found', function() {
+	var dbPath = './testdb/singleProjectionAccess3.db'
 		, originalValue = {
 	  		aKey: 'keyval'
 			, aVal: 'hiya'
@@ -121,16 +109,11 @@ describe('bjorling level projection storage, when the key is not found', functio
 			projectionStorage.save(originalValue, eb(done, performGetValue))
 		}
 		
-		var s = storage(dbPath)
-		db = s._db
-		s('spec 1', 'aKey', eb(done, performSave))
+		performSave(storage(dbPath)('spec 1', 'aKey'))
 	})
 
 	after(function(done) {
-		db.close(function(err) {
-			if(err) done()
-			fs.unlink(dbPath)
-		})
+		fs.unlink(dbPath, done)
 	})
 
   it('should result in a null value', function() {
@@ -138,8 +121,8 @@ describe('bjorling level projection storage, when the key is not found', functio
   })
 })
 
-describe('bjorling level projection storage, when retrieving state with an event that does not contain a value for the key, but matches an index', function() {
-	var db
+describe('bjorling nedb projection storage, when retrieving state with an event that does not contain a value for the key, but matches an index', function() {
+	var dbPath = './testdb/singleProjectionAccess4.db'
 		, val1 = {
 				theKey: 'key1'
 			, aVal: 'val 1'
@@ -162,21 +145,14 @@ describe('bjorling level projection storage, when retrieving state with an event
 	  	}, eb(done, completeGet))
 		}
 
-		var s = storage(dbPath)
-		db = s._db
-		s('proj 2', 'theKey', eb(done, function(p) {
-			projectionStorage = p
-			projectionStorage.addIndex('aVal', function() {
-				projectionStorage.save(val1, eb(done, performGetValue))
-			})
-		}))
+		projectionStorage = storage(dbPath)('proj 2', 'theKey')
+		projectionStorage.addIndex('aVal', function() {
+			projectionStorage.save(val1, eb(done, performGetValue))
+		})
 	})
 
 	after(function(done) {
-		db.close(function(err) {
-			if(err) done()
-			fs.unlink(dbPath)
-		})
+		fs.unlink(dbPath, done)
 	})
 
   it('should allow retrieval of value by key', function() {
@@ -184,8 +160,8 @@ describe('bjorling level projection storage, when retrieving state with an event
   })
 })
 
-describe('bjorling level projection storage, when there are multiple indexes and the get parameter contains a value for both indexes, but not a value for the key', function() {
-	var db
+describe('bjorling nedb projection storage, when there are multiple indexes and the get parameter contains a value for both indexes, but not a value for the key', function() {
+	var dbPath = './testdb/singleProjectionAccess5.db'
 		, faker = {
 				theKey: 'key1'
 			, indexPart1: 'billy'
@@ -214,25 +190,18 @@ describe('bjorling level projection storage, when there are multiple indexes and
 	  	}, eb(done, completeGet))
 		}
 
-		var s = storage(dbPath)
-		db = s._db
-		s('proj 2', 'theKey', eb(done, function(p) {
-			projectionStorage = p
-			projectionStorage.addIndex('indexPart1', function() {
-				projectionStorage.addIndex('indexPart2', function() {
-					projectionStorage.save(real, eb(done, function() {
-						projectionStorage.save(faker, eb(done, performGetValue))
-					}))
-				})
+		projectionStorage = storage(dbPath)('proj 2', 'theKey')
+		projectionStorage.addIndex('indexPart1', function() {
+			projectionStorage.addIndex('indexPart2', function() {
+				projectionStorage.save(real, eb(done, function() {
+					projectionStorage.save(faker, eb(done, performGetValue))
+				}))
 			})
-		}))
+		})
 	})
 
 	after(function(done) {
-		db.close(function(err) {
-			if(err) done()
-			fs.unlink(dbPath)
-		})
+		fs.unlink(dbPath, done)
 	})
 
   it('should retrieve value that contains both matching index values', function() {
@@ -240,8 +209,8 @@ describe('bjorling level projection storage, when there are multiple indexes and
   })
 })
 
-describe('bjorling level projection storage, when retrieving state with an event that does not contain a value for the key, but matches an index in an array', function() {
-	var db
+describe('bjorling nedb projection storage, when retrieving state with an event that does not contain a value for the key, but matches an index in an array', function() {
+	var dbPath = './testdb/singleProjectionAccess6.db'
 		, val1 = {
 				theKey: 'key1'
 			, aVal: ['val 1', 'val 3']
@@ -264,21 +233,14 @@ describe('bjorling level projection storage, when retrieving state with an event
 	  	}, eb(done, completeGet))
 		}
 
-		var s = storage(dbPath)
-		db = s._db
-		s('proj 2', 'theKey', eb(done, function(p) {
-			projectionStorage = p
-			projectionStorage.addIndex('aVal', function() {
-				projectionStorage.save(val1, eb(done, performGetValue))
-			})
-		}))
+		projectionStorage = storage(dbPath)('proj 2', 'theKey')
+		projectionStorage.addIndex('aVal', function() {
+			projectionStorage.save(val1, eb(done, performGetValue))
+		})
 	})
 
 	after(function(done) {
-		db.close(function(err) {
-			if(err) done()
-			fs.unlink(dbPath)
-		})
+		fs.unlink(dbPath, done)
 	})
 
   it('should allow retrieval of value by key', function() {

@@ -6,6 +6,8 @@ module.exports = createNeDbStorage
 
 
 function createNeDbStorage(location) {
+	if(!location) throw new errors.InitializationError('Bjorling NeDb Storage requires a location to be initialized.')
+
 	var db = existingStorage[location] = existingStorage[location] || new Datastore({
 		filename: location
 	, autoload: true
@@ -14,14 +16,6 @@ function createNeDbStorage(location) {
 	return function(projectionName, key) {
 		return new NeDbProjection(db, projectionName, key)
 	}
-}
-
-function NeDbStorage(location, key) {
-	if(!(this instanceof NeDbStorage)) {
-		return new NeDbStorage(location)
-	}
-
-	if(!location) throw new errors.InitializationError('Bjorling NeDb Storage requires a location to be initialized.')
 }
 
 function NeDbProjection(db, projectionName, key) {
@@ -33,9 +27,7 @@ function NeDbProjection(db, projectionName, key) {
 
 NeDbProjection.prototype.addIndex = function(index, cb) {
 	this._indexes.push(index)
-	setImmediate(function() {
-		cb && cb()
-	})
+	this._db.ensureIndex({ fieldName: index }, cb)
 }
 
 NeDbProjection.prototype.get = function(queryObj, cb) {
@@ -69,7 +61,14 @@ NeDbProjection.prototype.get = function(queryObj, cb) {
 	}
 
 	if(query) {
-		this._db.findOne(query, cb)
+		this._db.findOne(query, function(err, record) {
+			if(err) return cb(err)
+
+			if(record) {
+				delete record._id
+			}
+			cb(null, record)
+		})
 	} else {
 		setImmediate(function() {
 			cb(null, null)
@@ -111,42 +110,6 @@ NeDbProjection.prototype.save = function(val, cb) {
 }
 
 /*
-var levelup = require('levelup')
-	, sub = require('level-sublevel')
-	, levelQuery = require('level-queryengine')
-	, deleteStream = require('level-delete-stream')
-	, engine = require('jsonquery-engine')
-	, errors = require('./errors')
-
-
-
-function isUndefined(val) {
-	return typeof(val) === 'undefined'
-}
-
-function BjorlingLevelProjectionStorage(db, projectionName, key) {
-	this._db = levelQuery(db)
-	this._db.query.use(engine())
-
-	this._key = key
-	this._projectionName = projectionName
-
-	this._indexes = []
-}
-
-BjorlingLevelProjectionStorage.prototype.getKeyValue = function(obj) {
-	var key = this._key
-		, parts = Array.isArray(key) ? key.map(getVal) : [getVal(key)]
-
-	function getVal(keyPart) {
-		return obj[keyPart]
-	}
-
-	if(parts.some(isUndefined)) return null
-
-	return parts.join('')
-}
-
 BjorlingLevelProjectionStorage.prototype.get = function(queryObj, cb) {
 	var db = this._db
 		, keyVal = this.getKeyValue(queryObj)
@@ -228,20 +191,6 @@ BjorlingLevelProjectionStorage.prototype.get = function(queryObj, cb) {
 
 	return performQuery()
 }
-
-BjorlingLevelProjectionStorage.prototype.reset = function(cb) {
-	var db = this._db
-	db.createKeyStream()
-		.pipe(deleteStream(db, cb))
-}
-
-BjorlingLevelProjectionStorage.prototype.save = function(val, cb) {
-	var keyVal = this.getKeyValue(val)
-	//console.log('saving', this._projectionName, this._key, keyVal)
-	this._db.put(keyVal, val, cb)
-}
-
-
 
 function getArgs(arrayLike) {
 	return Array.prototype.slice.call(arrayLike, 0)
