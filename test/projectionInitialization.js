@@ -9,12 +9,11 @@ describe('bjorling nedb projection storage, when properly initialized', function
 
 	before(function(done) {
 		projectionStorage = storage(dbPath)('aProjection', 'aKey')
-		setImmediate(done)
+		process.nextTick(done)
 	})
 
 	after(function(done) {
 		fs.unlink(dbPath, function(err) {
-			if(err) return done()
 			done()
 		})
 	})
@@ -23,7 +22,7 @@ describe('bjorling nedb projection storage, when properly initialized', function
 		projectionStorage.should.not.be.null
 	})
 })
-
+/*
 describe('bjorling nedb projection storage, when properly initialized for the first time', function() {
 	var dbPath = './testdb/projectionInitialization2.db'
 		, currentStatus
@@ -48,7 +47,7 @@ describe('bjorling nedb projection storage, when properly initialized for the fi
 		currentStatus.lastProcessedEvent.should.equal(0)
 	})
 })
-
+*/
 describe('bjorling nedb projection storage, when initialized without a projection name', function() {
 	var dbPath = './testdb/projectionInitialization3.db'
 		, thrownError
