@@ -100,6 +100,10 @@ NeDbProjection.prototype.get = function(queryObj, cb) {
 	}
 }
 
+NeDbProjection.prototype.getAll = function(cb) {
+	this._db.find({}, cb)
+}
+
 NeDbProjection.prototype.getKeyValue = function(obj) {
 	var key = this._key
 		, parts = Array.isArray(key) ? key : [key]
