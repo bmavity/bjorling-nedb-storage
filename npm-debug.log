@@ -1,0 +1,117 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node', '/usr/local/bin/npm', 'publish' ]
+2 info using npm@1.4.21
+3 info using node@v0.10.30
+4 verbose publish [ '.' ]
+5 verbose cache add [ '.', null ]
+6 verbose cache add name=undefined spec="." args=[".",null]
+7 verbose parsed url { protocol: null,
+7 verbose parsed url   slashes: null,
+7 verbose parsed url   auth: null,
+7 verbose parsed url   host: null,
+7 verbose parsed url   port: null,
+7 verbose parsed url   hostname: null,
+7 verbose parsed url   hash: null,
+7 verbose parsed url   search: null,
+7 verbose parsed url   query: null,
+7 verbose parsed url   pathname: '.',
+7 verbose parsed url   path: '.',
+7 verbose parsed url   href: '.' }
+8 silly lockFile 3a52ce78- .
+9 verbose lock . /Users/bmavity/.npm/3a52ce78-.lock
+10 verbose tar pack [ '/Users/bmavity/.npm/bjorling-nedb-storage/0.6.0/package.tgz',
+10 verbose tar pack   '.' ]
+11 verbose tarball /Users/bmavity/.npm/bjorling-nedb-storage/0.6.0/package.tgz
+12 verbose folder .
+13 info prepublish bjorling-nedb-storage@0.6.0
+14 silly lockFile 1f1177db-tar tar://.
+15 verbose lock tar://. /Users/bmavity/.npm/1f1177db-tar.lock
+16 silly lockFile 1f152fef-g-nedb-storage-0-6-0-package-tgz tar:///Users/bmavity/.npm/bjorling-nedb-storage/0.6.0/package.tgz
+17 verbose lock tar:///Users/bmavity/.npm/bjorling-nedb-storage/0.6.0/package.tgz /Users/bmavity/.npm/1f152fef-g-nedb-storage-0-6-0-package-tgz.lock
+18 silly lockFile 1f1177db-tar tar://.
+19 silly lockFile 1f1177db-tar tar://.
+20 silly lockFile 1f152fef-g-nedb-storage-0-6-0-package-tgz tar:///Users/bmavity/.npm/bjorling-nedb-storage/0.6.0/package.tgz
+21 silly lockFile 1f152fef-g-nedb-storage-0-6-0-package-tgz tar:///Users/bmavity/.npm/bjorling-nedb-storage/0.6.0/package.tgz
+22 silly lockFile bd8e74eb-rling-nedb-storage-0-6-0-package /Users/bmavity/.npm/bjorling-nedb-storage/0.6.0/package
+23 verbose lock /Users/bmavity/.npm/bjorling-nedb-storage/0.6.0/package /Users/bmavity/.npm/bd8e74eb-rling-nedb-storage-0-6-0-package.lock
+24 silly lockFile bd8e74eb-rling-nedb-storage-0-6-0-package /Users/bmavity/.npm/bjorling-nedb-storage/0.6.0/package
+25 silly lockFile bd8e74eb-rling-nedb-storage-0-6-0-package /Users/bmavity/.npm/bjorling-nedb-storage/0.6.0/package
+26 silly lockFile 3a52ce78- .
+27 silly lockFile 3a52ce78- .
+28 silly publish { name: 'bjorling-nedb-storage',
+28 silly publish   author:
+28 silly publish    { name: 'Brian Mavity',
+28 silly publish      email: 'brian@brianmavity.com',
+28 silly publish      url: 'http://www.brianmavity.com' },
+28 silly publish   repository:
+28 silly publish    { type: 'git',
+28 silly publish      url: 'git://github.com/bmavity/bjorling-nedb-storage.git' },
+28 silly publish   bugs: { url: 'https://github.com/bmavity/bjorling-nedb-storage/issues' },
+28 silly publish   contributors:
+28 silly publish    [ { name: 'Brian Mavity',
+28 silly publish        email: 'brian@brianmavity.com',
+28 silly publish        url: 'http://www.brianmavity.com' } ],
+28 silly publish   description: 'nedb storage for Bjorling',
+28 silly publish   dependencies: { nedb: '^0.10.6' },
+28 silly publish   devDependencies: { bjorling: '0.x.x', mocha: '1.x.x', should: '1.x.x' },
+28 silly publish   engines: { node: '0.10.x' },
+28 silly publish   scripts:
+28 silly publish    { test: 'mocha -r should -R tap test/**/*.js',
+28 silly publish      watch: 'mocha -w -r should -R spec test/**/*.js' },
+28 silly publish   keywords: [],
+28 silly publish   license: 'mit +no-false-attribs, +no-advertising license',
+28 silly publish   main: './bjorling-nedb-storage.js',
+28 silly publish   version: '0.6.0',
+28 silly publish   readme: '# bjorling-nedb-storage\n## nedb storage for Bjorling',
+28 silly publish   readmeFilename: 'README.md',
+28 silly publish   gitHead: '94d8be97881a950fa2b534be2a95568014cb7c3b',
+28 silly publish   homepage: 'https://github.com/bmavity/bjorling-nedb-storage',
+28 silly publish   _id: 'bjorling-nedb-storage@0.6.0',
+28 silly publish   _shasum: 'd5347ea361d835b7f7655df051b36ca3cb784357',
+28 silly publish   _from: '.' }
+29 verbose request where is /bjorling-nedb-storage
+30 verbose request registry https://registry.npmjs.org/
+31 verbose request id b9971b47d988cb3d
+32 verbose url raw /bjorling-nedb-storage
+33 verbose url resolving [ 'https://registry.npmjs.org/', './bjorling-nedb-storage' ]
+34 verbose url resolved https://registry.npmjs.org/bjorling-nedb-storage
+35 verbose request where is https://registry.npmjs.org/bjorling-nedb-storage
+36 info trying registry request attempt 1 at 18:14:47
+37 http PUT https://registry.npmjs.org/bjorling-nedb-storage
+38 http 403 https://registry.npmjs.org/bjorling-nedb-storage
+39 verbose headers { date: 'Sat, 16 Aug 2014 23:14:48 GMT',
+39 verbose headers   server: 'CouchDB/1.5.0 (Erlang OTP/R14B04)',
+39 verbose headers   'content-type': 'application/json',
+39 verbose headers   'cache-control': 'max-age=60',
+39 verbose headers   'content-length': '3172',
+39 verbose headers   'accept-ranges': 'bytes',
+39 verbose headers   via: '1.1 varnish',
+39 verbose headers   'x-served-by': 'cache-ord1723-ORD',
+39 verbose headers   'x-cache': 'MISS',
+39 verbose headers   'x-cache-hits': '0',
+39 verbose headers   'x-timer': 'S1408230888.141932,VS0,VE234',
+39 verbose headers   'keep-alive': 'timeout=10, max=50',
+39 verbose headers   connection: 'Keep-Alive' }
+40 error publish Failed PUT 403
+41 error Error: forbidden cannot modify pre-existing version: 0.6.0
+41 error old={"name":"bjorling-nedb-storage","author":{"name":"Brian Mavity","email":"brian@brianmavity.com","url":"http://www.brianmavity.com"},"repository":{"type":"git","url":"git://github.com/bmavity/bjorling-nedb-storage.git"},"bugs":{"url":"https://github.com/bmavity/bjorling-nedb-storage/issues"},"contributors":[{"name":"Brian Mavity","email":"brian@brianmavity.com","url":"http://www.brianmavity.com"}],"description":"nedb storage for Bjorling","dependencies":{"nedb":"^0.10.6"},"devDependencies":{"bjorling":"0.x.x","mocha":"1.x.x","should":"1.x.x"},"engines":{"node":"0.10.x"},"scripts":{"test":"mocha -r should -R tap test/**/*.js","watch":"mocha -w -r should -R spec test/**/*.js"},"keywords":[],"license":"mit +no-false-attribs, +no-advertising license","main":"./bjorling-nedb-storage.js","version":"0.6.0","gitHead":"62bd7323fb396237ef75ba1fb1d1e07cc1ebba74","homepage":"https://github.com/bmavity/bjorling-nedb-storage","_id":"bjorling-nedb-storage@0.6.0","_shasum":"01e26b1f3ab36a12c6ed968bb9158c6aa9865dc9","_from":".","_npmVersion":"1.4.14","_npmUser":{"name":"bmavity","email":"brian@brianmavity.com"},"maintainers":[{"name":"bmavity","email":"brian@brianmavity.com"}],"dist":{"shasum":"01e26b1f3ab36a12c6ed968bb9158c6aa9865dc9","tarball":"http://registry.npmjs.org/bjorling-nedb-storage/-/bjorling-nedb-storage-0.6.0.tgz"}}
+41 error new={"name":"bjorling-nedb-storage","author":{"name":"Brian Mavity","email":"brian@brianmavity.com","url":"http://www.brianmavity.com"},"repository":{"type":"git","url":"git://github.com/bmavity/bjorling-nedb-storage.git"},"bugs":{"url":"https://github.com/bmavity/bjorling-nedb-storage/issues"},"contributors":[{"name":"Brian Mavity","email":"brian@brianmavity.com","url":"http://www.brianmavity.com"}],"description":"nedb storage for Bjorling","dependencies":{"nedb":"^0.10.6"},"devDependencies":{"bjorling":"0.x.x","mocha":"1.x.x","should":"1.x.x"},"engines":{"node":"0.10.x"},"scripts":{"test":"mocha -r should -R tap test/**/*.js","watch":"mocha -w -r should -R spec test/**/*.js"},"keywords":[],"license":"mit +no-false-attribs, +no-advertising license","main":"./bjorling-nedb-storage.js","version":"0.6.0","readme":"# bjorling-nedb-storage\u000a## nedb storage for Bjorling","readmeFilename":"README.md","gitHead":"94d8be97881a950fa2b534be2a95568014cb7c3b","homepage":"https://github.com/bmavity/bjorling-nedb-storage","_id":"bjorling-nedb-storage@0.6.0","_shasum":"d5347ea361d835b7f7655df051b36ca3cb784357","_from":".","_npmVersion":"1.4.21","_npmUser":{"name":"bmavity","email":"brian@brianmavity.com"},"maintainers":[{"name":"bmavity","email":"brian@brianmavity.com"}],"dist":{"shasum":"d5347ea361d835b7f7655df051b36ca3cb784357","tarball":"http://registry.npmjs.org/bjorling-nedb-storage/-/bjorling-nedb-storage-0.6.0.tgz"}}: bjorling-nedb-storage
+41 error     at RegClient.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:300:14)
+41 error     at Request._callback (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:238:65)
+41 error     at Request.self.callback (/usr/local/lib/node_modules/npm/node_modules/request/request.js:123:22)
+41 error     at Request.emit (events.js:98:17)
+41 error     at Request.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:893:14)
+41 error     at Request.emit (events.js:117:20)
+41 error     at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:844:12)
+41 error     at IncomingMessage.emit (events.js:117:20)
+41 error     at _stream_readable.js:938:16
+41 error     at process._tickCallback (node.js:419:13)
+42 error If you need help, you may report this *entire* log,
+42 error including the npm and node versions, at:
+42 error     <http://github.com/npm/npm/issues>
+43 error System Darwin 13.3.0
+44 error command "/usr/local/bin/node" "/usr/local/bin/npm" "publish"
+45 error cwd /Users/bmavity/node_projects/bjorling-nedb-storage
+46 error node -v v0.10.30
+47 error npm -v 1.4.21
+48 verbose exit [ 1, true ]

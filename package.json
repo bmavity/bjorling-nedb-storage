@@ -30,5 +30,5 @@
   "keywords": [],
   "license": "mit +no-false-attribs, +no-advertising license",
   "main": "./bjorling-nedb-storage.js",
-  "version": "0.6.0"
+  "version": "0.6.1"
 }
