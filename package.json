@@ -13,8 +13,8 @@
   ],
   "description": "nedb storage for Bjorling",
   "dependencies": {
-    "errno": "^0.1.1"
-  , "nedb": "^0.10.6"
+    "errno": "^0.1.1",
+    "nedb": "^0.10.6"
   },
   "devDependencies": {
     "bjorling": "0.x.x",
@@ -31,5 +31,5 @@
   "keywords": [],
   "license": "mit +no-false-attribs, +no-advertising license",
   "main": "./bjorling-nedb-storage.js",
-  "version": "0.6.1"
+  "version": "0.6.2"
 }
