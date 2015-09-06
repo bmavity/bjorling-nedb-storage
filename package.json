@@ -13,7 +13,8 @@
   ],
   "description": "nedb storage for Bjorling",
   "dependencies": {
-    "nedb": "^0.10.6"
+    "errno": "^0.1.1"
+  , "nedb": "^0.10.6"
   },
   "devDependencies": {
     "bjorling": "0.x.x",
